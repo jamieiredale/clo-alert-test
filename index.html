@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic Form</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        /* Custom styles for the form */
+        .form-column {
+            padding: 0 10px;
+        }
+
+        /* Custom styles for the tables */
+        .table {
+            width: 100%;
+            margin-bottom: 1rem;
+            background-color: transparent;
+            color: #212529;
+        }
+
+        .table th,
+        .table td {
+            padding: 0.75rem;
+            vertical-align: top;
+            border-top: 1px solid #ebebeb;
+        }
+
+        .table thead th {
+            vertical-align: bottom;
+            border-bottom: 2px solid #ebebeb;
+        }
+
+        .table tbody+tbody {
+            border-top: 2px solid #ebebeb;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1 class="mt-5">Header</h1>
+
+    <div class="row mt-4">
+        <!-- Form column 1 -->
+        <div class="col-md-6">
+            <form onsubmit="submitForm(event)">
+                <div class="mb-3">
+                    <label for="classes" class="form-label">Classes:</label>
+                    <input type="text" id="classes" name="classes" class="form-control">
+                    <input type="text" id="classesFootnote" name="classesFootnote" placeholder="Footnote" class="form-control mt-2">
+                </div>
+                
+                <div class="mb-3">
+                    <label for="par" class="form-label">CLO Size:</label> 
+                    <input type="text" id="par" name="par" class="form-control">
+                    <input type="text" id="parFootnote" name="parFootnote" placeholder="Footnote" class="form-control mt-2">
+                </div>
+                
+                <div class="mb-3">
+                    <label for="parSub" class="form-label">Par Sub:</label>
+                    <input type="text" id="parSub" name="parSub" class="form-control">
+                    <input type="text" id="parSubFootnote" name="parSubFootnote" placeholder="Footnote" class="form-control mt-2">
+                </div>
+            </form>
+        </div>
+
+        <!-- Form column 2 -->
+        <div class="col-md-6">
+            <form onsubmit="submitForm(event)">
+                <div class="mb-3">
+                    <label for="ratings" class="form-label">Ratings:</label>
+                    <input type="text" id="ratings" name="ratings" class="form-control">
+                    <input type="text" id="ratingsFootnote" name="ratingsFootnote" placeholder="Footnote" class="form-control mt-2">
+                </div>
+                
+                <div class="mb-3">
+                    <label for="wal" class="form-label">WAL:</label>
+                    <input type="text" id="wal" name="wal" class="form-control">
+                    <input type="text" id="walFootnote" name="walFootnote" placeholder="Footnote" class="form-control mt-2">
+                </div>
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <table id="resultsTable" class="table mt-5" style="display: none;">
+        <thead>
+            <tr>
+                <th colspan="2">Results</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <table id="footnotesTable" class="table mt-4" style="display: none;">
+        <thead>
+            <tr>
+                <th colspan="2">Footnotes</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<!-- Bootstrap JS  -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function injectFootnotes(tableId) {
+        var table = document.getElementById(tableId);
+        if (!table) {
+            console.error('Table with id ' + tableId + ' not found.');
+            return;
+        }
+        
+        var footnotes = table.querySelectorAll('td[data-label="footnote"]');
+        var index = 1; // Initialize index to 1
+        footnotes.forEach(function(footnote) {
+            var span = document.createElement('span');
+            span.textContent = '[*' + index + ']';
+            footnote.appendChild(span);
+            index++; // Increment index for the next footnote
+        });
+    }
+
+    function submitForm(event) {
+        event.preventDefault();
+
+        var classes = document.getElementById("classes").value;
+        var par = document.getElementById("par").value;
+        var parSub = document.getElementById("parSub").value;
+        var ratings = document.getElementById("ratings").value;
+        var wal = document.getElementById("wal").value;
+
+        var classesFootnote = document.getElementById("classesFootnote").value;
+        var parFootnote = document.getElementById("parFootnote").value;
+        var parSubFootnote = document.getElementById("parSubFootnote").value;
+        var ratingsFootnote = document.getElementById("ratingsFootnote").value;
+        var walFootnote = document.getElementById("walFootnote").value;
+
+        var resultsTable = document.getElementById("resultsTable");
+        var resultsTbody = resultsTable.querySelector("tbody");
+        resultsTbody.innerHTML = ""; // Clear table body
+
+        var tbody = document.createElement("tbody");
+
+        var row = document.createElement("tr");
+        var th1 = document.createElement("th");
+        th1.textContent = "Classes";
+        var td1 = document.createElement("td");
+        td1.textContent = classes;
+        row.appendChild(th1);
+        row.appendChild(td1);
+        tbody.appendChild(row);
+
+        row = document.createElement("tr");
+        var th2 = document.createElement("th");
+        th2.textContent = "CLO Size"; 
+        var td2 = document.createElement("td");
+        td2.textContent = par;
+        row.appendChild(th2);
+        row.appendChild(td2);
+        tbody.appendChild(row);
+
+        row = document.createElement("tr");
+        var th3 = document.createElement("th");
+        th3.textContent = "Par Sub";
+        var td3 = document.createElement("td");
+        td3.textContent = parSub;
+        row.appendChild(th3);
+        row.appendChild(td3);
+        tbody.appendChild(row);
+
+        row = document.createElement("tr");
+        var th4 = document.createElement("th");
+        th4.textContent = "Ratings";
+        var td4 = document.createElement("td");
+        td4.textContent = ratings;
+        row.appendChild(th4);
+        row.appendChild(td4);
+        tbody.appendChild(row);
+
+        row = document.createElement("tr");
+        var th5 = document.createElement("th");
+        th5.textContent = "WAL";
+        var td5 = document.createElement("td");
+        td5.textContent = wal;
+        row.appendChild(th5);
+        row.appendChild(td5);
+        tbody.appendChild(row);
+
+        resultsTbody.appendChild(tbody);
+        resultsTable.style.display = ""; // Show results table
+
+        // Add integer from injectFootnotes function to the Results table
+        var index = 1;
+        resultsTable.querySelectorAll('th').forEach(function(th) {
+            if (th.textContent !== "Results") {
+                var fieldName = th.textContent.split(' ')[0].toLowerCase();
+                var footnoteField = document.getElementById(fieldName + 'Footnote');
+                if (footnoteField && footnoteField.value.trim() !== "") {
+                    th.textContent += ' [*' + index + ']';
+                    index++;
+                }
+            }
+        });
+
+        // Create Footnotes Table
+        var footnotesTable = document.getElementById("footnotesTable");
+        var footnotesTbody = footnotesTable.querySelector("tbody");
+        footnotesTbody.innerHTML = ""; // Clear table body
+
+        var indexFootnote = 1; // Initialize index to 1 for footnotes
+        if (classesFootnote) {
+            var row1 = document.createElement("tr");
+            var th1Footnote = document.createElement("th");
+            th1Footnote.textContent = "Classes Footnote";
+            var td1Footnote = document.createElement("td");
+            td1Footnote.textContent = '[*' + indexFootnote + '] ' + classesFootnote; // Adjusted here
+            row1.appendChild(th1Footnote);
+            row1.appendChild(td1Footnote);
+            footnotesTbody.appendChild(row1);
+            indexFootnote++;
+        }
+
+        if (parFootnote) {
+            var row2 = document.createElement("tr");
+            var th2Footnote = document.createElement("th");
+            th2Footnote.textContent = "CLO Size Footnote"; // Changed from "Par Footnote" to "CLO Size Footnote"
+            var td2Footnote = document.createElement("td");
+            td2Footnote.textContent = '[*' + indexFootnote + '] ' + parFootnote; // Adjusted here
+            row2.appendChild(th2Footnote);
+            row2.appendChild(td2Footnote);
+            footnotesTbody.appendChild(row2);
+            indexFootnote++;
+        }
+
+        if (parSubFootnote) {
+            var row3 = document.createElement("tr");
+            var th3Footnote = document.createElement("th");
+            th3Footnote.textContent = "Par Sub Footnote";
+            var td3Footnote = document.createElement("td");
+            td3Footnote.textContent = '[*' + indexFootnote + '] ' + parSubFootnote; // Adjusted here
+            row3.appendChild(th3Footnote);
+            row3.appendChild(td3Footnote);
+            footnotesTbody.appendChild(row3);
+            indexFootnote++;
+        }
+
+        if (ratingsFootnote) {
+            var row4 = document.createElement("tr");
+            var th4Footnote = document.createElement("th");
+            th4Footnote.textContent = "Ratings Footnote";
+            var td4Footnote = document.createElement("td");
+            td4Footnote.textContent = '[*' + indexFootnote + '] ' + ratingsFootnote; // Adjusted here
+            row4.appendChild(th4Footnote);
+            row4.appendChild(td4Footnote);
+            footnotesTbody.appendChild(row4);
+            indexFootnote++;
+        }
+
+        if (walFootnote) {
+            var row5 = document.createElement("tr");
+            var th5Footnote = document.createElement("th");
+            th5Footnote.textContent = "WAL Footnote";
+            var td5Footnote = document.createElement("td");
+            td5Footnote.textContent = '[*' + indexFootnote + '] ' + walFootnote; // Adjusted here
+            row5.appendChild(th5Footnote);
+            row5.appendChild(td5Footnote);
+            footnotesTbody.appendChild(row5);
+            indexFootnote++;
+        }
+
+        footnotesTable.style.display = footnotesTbody.children.length ? "" : "none"; // Show footnotes table if there are footnotes
+
+        // Apply integer from injectFootnotes function to Footnotes table
+        injectFootnotes("footnotesTable");
+    }
+</script>
+</body>
+</html>
